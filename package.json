@@ -1,0 +1,62 @@
+{
+  "name": "drag-demo",
+  "author": "xy",
+  "description": "拖拽demo",
+  "version": "1.0.0",
+  "license": "ISC",
+  "private": true,
+  "scripts": {
+    "dev": "webpack-dev-server --config config/webpack.dev.js --env.currentEnv=test",
+    "build": "webpack --config config/webpack.prod.js --env.currentEnv=prod",
+    "build:test": "webpack --config config/webpack.prod.js --env.currentEnv=test"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-decorators": "^7.4.0",
+    "@babel/plugin-transform-object-assign": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.4.0",
+    "@babel/polyfill": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/runtime": "^7.4.2",
+    "@babel/runtime-corejs3": "^7.4.2",
+    "autoprefixer": "^9.0.0",
+    "babel-loader": "^8.0.5",
+    "babel-polyfill": "^6.26.0",
+    "clean-webpack-plugin": "^2.0.1",
+    "core-js": "^3.0.0",
+    "css-loader": "^2.1.1",
+    "file-loader": "^1.1.11",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
+    "html-withimg-loader": "^0.1.16",
+    "node-sass": "^4.8.3",
+    "portscanner": "^2.2.0",
+    "postcss-loader": "^2.1.6",
+    "precss": "^3.1.2",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dashboard": "^2.0.0",
+    "webpack-dev-server": "^3.1.3",
+    "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {
+    "art-template": "^4.12.2",
+    "art-template-loader": "^1.4.3",
+    "axios": "^0.18.0",
+    "fastclick": "^1.0.6",
+    "jquery": "^3.3.1",
+    "vconsole": "^3.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaoyao9524/webpack-devtool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xiaoyao9524/webpack-devtool/issues"
+  },
+  "homepage": "https://github.com/xiaoyao9524/webpack-devtool#readme"
+}

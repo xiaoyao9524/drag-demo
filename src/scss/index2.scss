@@ -1,0 +1,19 @@
+body {
+  padding: 20px;
+}
+#list {
+  width: 450px;
+  height: 240px;
+  .dragin {
+    transform: scale(1.1);
+  }
+  .item {
+    float: left;
+    width: 150px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    color: #fff;
+    font-family: Helvetica,sans-serif;
+  }
+}

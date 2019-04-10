@@ -1,0 +1,38 @@
+body {
+    padding: 20px;
+}
+.dustbin {
+    float: left;
+    width: 100px;
+    height: 260px;
+    font-size: 34px;
+    text-align: center;
+    text-shadow: -1px -1px #bbb;
+    background: gray;
+    &.white {
+        color: #fff;
+    }
+}
+
+.list {
+    float: left;
+    padding-left: 20px;
+    width: 500px;
+    .item {
+        padding: 10px;
+        margin-bottom: 5px;
+        border: 2px dashed #ccc;
+        background-color: #eee;
+        cursor: move;
+    }
+}
+
+.tip {
+    margin-top: 20px;
+    width: 100%;
+    float: left;
+}
+
+.dragin {
+    opacity: .4;
+}

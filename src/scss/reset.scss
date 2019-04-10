@@ -1,0 +1,41 @@
+body,h1,h2,h3,h4,h5,h6{
+	margin:0;
+}
+body{
+	font-family: 微软雅黑;
+}
+ul, ol{
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+input{
+	padding:0;
+	margin:0;
+	border:none;
+}
+img{
+	vertical-align:top;
+	border:none;
+	width: 100%;
+	height: 100%;
+}
+p {
+	margin: 0;
+}
+a{
+	text-decoration:none;
+}
+dl{
+	margin:0;
+	list-style:none;
+}
+dd{
+	margin:0;
+}
+
+.clearfix:after {
+	display: block;
+	clear: both;
+	content: "";
+}
