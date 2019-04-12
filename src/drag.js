@@ -67,7 +67,8 @@ class Drag {
     const target = ev.target;
     target.classList.add('dragin')
     this.dragItem = target;
-
+    // 兼容firefox
+    ev.dataTransfer.setData('Text', this.innerHTML);
     if (this.animation) {
       this.drag.style.position = 'relative';
       for (let i = 0; i < this.dragItems.length; i++) {
@@ -80,7 +81,6 @@ class Drag {
       }
     }
     target.style.zIndex = '101';
-    
   }
 
   handlerDragEnd = ev => {
@@ -100,7 +100,6 @@ class Drag {
         item.style.top = '';
       }
     }
-
   }
 
   // 在被碰撞元素中移动
