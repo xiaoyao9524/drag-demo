@@ -4,7 +4,7 @@ import "./scss/index2.scss";
 import FastClick from 'fastclick';
 FastClick.attach(document.body);
 
-import Drag from './drag'
+import Drag from './Drag'
 
 let data = [{
     title: 'Aquamarine',
@@ -54,5 +54,24 @@ for (let i = 0; i < data.length; i++) {
 }
 
 list.innerHTML = html;
+function cb1 (data, items) {
+  console.log('cb1: ', data, items);
+}
+new Drag(list, data, cb1, true);
 
-new Drag(list, data, true);
+
+let list2 = document.querySelector('.list2');
+let data2 = ['item1', 'item2', 'item3'];
+let html2 = '';
+for (let item of data2) {
+  html2 += `<li class="item">${item} <button style="float: right;margin: 16px 5px 0 0;">删除</button></li>`;
+}
+list2.innerHTML = html2;
+
+function cb2 (data, items) {
+  console.log('cb2: ', data.join('、'), items);
+}
+
+let drag2 = new Drag(list2, data2, cb2, true);
+
+

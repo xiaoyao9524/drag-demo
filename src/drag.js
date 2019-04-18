@@ -1,5 +1,5 @@
 class Drag {
-  constructor(drag, data, animation = false) {
+  constructor(drag, data, callBack, animation = false) {
     if (!drag) {
       new Throw('未传入参数：drag');
       return;
@@ -14,12 +14,13 @@ class Drag {
     } else {
       this.data = data;
     }
+
+    this.callBack = callBack;
     // 是否开启移动动画效果
     this.animation = animation;
-
+    // 容器相关
     this.drag = drag;
     this.dragItems = Array.from(dragItems);
-
     // 上次被撞元素正在移动中，transitionend事件结束后置为false代表碰撞有效
     this.isMovein = false;
 
@@ -49,12 +50,19 @@ class Drag {
       }
       this.positionList = positionList;
     }
-
+    let that = this;
     for (let i = 0; i < dragItems.length; i++) {
       const item = dragItems[i];
       item.setAttribute('draggable', true);
       item.setAttribute('drag-index', i);
       item.classList.add('drag-item');
+      Array.from(item.children).forEach(function (item) {
+        console.log(item);
+        item.setAttribute('draggable', false);
+        // item.addEventListener('dragstart', that.stopPropagation);
+        // item.addEventListener('dragover', that.stopPropagation);
+        // item.addEventListener('dragend', that.stopPropagation);
+      })
 
       item.addEventListener('dragstart', this.handlerDragStart);
       item.addEventListener('dragover', this.handlerDragOver);
@@ -68,7 +76,7 @@ class Drag {
     target.classList.add('dragin')
     this.dragItem = target;
     // 兼容firefox
-    ev.dataTransfer.setData('Text', this.innerHTML);
+    ev.dataTransfer.setData('text', this.innerHTML);
     if (this.animation) {
       this.drag.style.position = 'relative';
       for (let i = 0; i < this.dragItems.length; i++) {
@@ -138,7 +146,8 @@ class Drag {
         if (that.data && that.data.length) {
           let dragDataItem = that.data.splice(dragIndex, 1)[0];
           that.data.splice(dropIndex, 0, dragDataItem);
-          console.log('当前data的顺序：', that.data.map(i => i.title).join('、'));
+          // console.log('当前data的顺序：', that.data.map(i => i.title).join('、'));
+          that.callBack && that.callBack(that.data, that.dragItems);
         }
         // 删除事件
         this.removeEventListener('transitionend', handlerTransitionend);
@@ -165,13 +174,35 @@ class Drag {
       if (this.data && this.data.length) {
         let dragDataItem = this.data.splice(dragIndex, 1)[0];
         this.data.splice(dropIndex, 0, dragDataItem);
-        console.log('当前data的顺序：', this.data.map(i => i.title).join('、'));
+        // console.log('当前data的顺序：', this.data.map(i => i.title).join('、'));
+        this.callBack && this.callBack(this.data, this.dragItems);
       }
       
       for (let i = 0; i < this.dragItems.length; i++) {
         this.dragItems[i].setAttribute('drag-index', i);
       }
     }
+  }
+
+  clear () {
+    for (let item of this.dragItems) {
+      item.removeAttribute('draggable');
+      item.removeAttribute('drag-index');
+      item.classList.remove('drag-item');
+
+      item.removeEventListener('dragstart', this.handlerDragStart);
+      item.removeEventListener('dragover', this.handlerDragOver);
+      item.removeEventListener('dragend', this.handlerDragEnd);
+    }
+  }
+
+  reload () {
+
+  }
+
+  stopPropagation (ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
   }
 }
 

@@ -5,45 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+    .box {
+      width: 200px;
+      height: 200px;
+      background: blue;
+    }
+    .box2 {
+      width: 100px;
+      height: 100px;
+      background: green;
+    }
+  </style>
 </head>
 <body>
-  <ul id="list">
-    <li class="item" drag-index="0">11111</li>
-    <li class="item" drag-index="1">22222</li>
-    <li class="item" drag-index="2">33333</li>
-    <li class="item" drag-index="3">44444</li>
-    <li class="item" drag-index="4">55555</li>
-  </ul>
+  <div class="box" draggable="true">
+      <button class="btn" draggable="false">按钮</button>
+  </div>
   <script>
-  let list = document.querySelector('#list');
-  let items = Array.from(list.querySelectorAll('.item'));
+    const box = document.querySelector('.box');
+    const btn = document.querySelector('.btn');
 
-  // list.replaceChild(items[0], items[4]);
-
-  list.insertBefore(items[1], items[3]);
-// 1534
-  // console.log(items);
-  // let replaceChild = list.replaceChild(items[4], items[1]);
-  // console.log(replaceChild);
-  // list.insertBefore(replaceChild, items[5]);
-  // [items[4], items[1]] = [items[1], items[4]];
-  // list.insertBefore(items[4], items[1]);
-  // exchange(items[1], items[4]);
-
-  function exchange (node1, node2) {
-    // let index1 = Number(node1.getAttribute('drag-index'));
-    // let index2 = Number(node2.getAttribute('drag-index'));
-    
-
-    // let replaceChild = list.replaceChild(node1, node2);
-    // console.log(items);
-    // let items = list.querySelectorAll('')
-    // list.insertBefore()
-    // let index1 = node1.getAttribute('drag-index');
-    // let index2 = node2.getAttribute('drag-index');
-
-    // list.insertBefore()
-  }
+    box.addEventListener('dragstart', function (ev) {
+      console.log(ev.target !== box);
+      if (ev.target !== box) {
+        return;
+      }
+      console.log('box');
+    })
+    btn.addEventListener('mousedown', function (ev) {
+      box.setAttribute('draggable', false);
+      ev.stopPropagation();
+    })
+    btn.addEventListener('mouseup', function (ev) {
+      box.setAttribute('draggable', true);
+      ev.stopPropagation();
+    })
+    btn.addEventListener('dragstart', function (ev) {
+      console.log('btn');
+      ev.stopPropagation();
+    })
   </script>
 </body>
 </html>

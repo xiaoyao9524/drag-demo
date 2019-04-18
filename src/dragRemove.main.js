@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import "./scss/reset.scss";
 import "./scss/index.scss";
 // import $ from 'jquery';
