@@ -4,47 +4,66 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>测试</title>
   <style>
-    .box {
-      width: 200px;
-      height: 200px;
-      background: blue;
-    }
-    .box2 {
-      width: 100px;
-      height: 100px;
-      background: green;
-    }
+  .box, .box2 {width: 200px;height: 200px;background: blue;}.box2 {margin: 100px 0 0 450px;background: green;}
+  .test[data-abc] {
+    width: 100px;
+    height: 100px;
+    background: red;
+  }
   </style>
 </head>
 <body>
-  <div class="box" draggable="true">
-      <button class="btn" draggable="false">按钮</button>
+  <div class="box test" draggable="true">
+    <button class="btn">按钮</button>
   </div>
+  <div class="box2"></div>
+
   <script>
     const box = document.querySelector('.box');
     const btn = document.querySelector('.btn');
+    const box2 = document.querySelector('.box2');
+
+    console.log(Array.from(box.children).indexOf(btn));
 
     box.addEventListener('dragstart', function (ev) {
-      console.log(ev.target !== box);
+      console.log('box-dratstart', ev.target, ev);
+    })
+
+    box.addEventListener('dragover', function (ev) {
       if (ev.target !== box) {
-        return;
+        console.log(ev.target, ev);
+      } else {
+        console.log(111)
       }
-      console.log('box');
+      // console.log('box-dragover', box === ev.target, ev);
     })
-    btn.addEventListener('mousedown', function (ev) {
-      box.setAttribute('draggable', false);
-      ev.stopPropagation();
+
+    // btn.addEventListener('dragstart', function (ev) {
+    //   console.log('btn dragstart');
+    //   ev.stopPropagation();
+    // })
+
+    
+
+    box2.addEventListener('dragover', function (ev) {
+      console.clear();
+      console.log(ev.target, ev);
     })
-    btn.addEventListener('mouseup', function (ev) {
-      box.setAttribute('draggable', true);
-      ev.stopPropagation();
-    })
-    btn.addEventListener('dragstart', function (ev) {
-      console.log('btn');
-      ev.stopPropagation();
-    })
+
+    // fj7sm39n01400
+    box.dataset['abc'] = '';
+    let styleTag = document.createElement('style');
+      styleTag.innerHTML = `
+        .child-drag-in[data-abc] {
+          width: 100px;
+          height: 150px;
+          background: pink;
+        }
+      `;
+      console.log(styleTag);
+      document.getElementsByTagName('head')[0].appendChild(styleTag);
   </script>
 </body>
 </html>
