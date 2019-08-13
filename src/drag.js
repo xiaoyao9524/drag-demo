@@ -1,30 +1,51 @@
+/*
+  1、默认只在子元素可拖拽，孙元素默认无法拖拽，可通过添加class方式规定可拖拽元素,未来添加限制子元素拖拽功能。
+
+
+*/
+
 class Drag {
   constructor(drag, data, callBack, animation = false) {
     if (!drag) {
-      new Throw('未传入参数：drag');
-      return;
+      return new Throw('未传入参数：drag');
     }
-    console.log(drag);
-    this.randomFlag = Number(Math.random().toString().substr(3, 7) + Date.now()).toString(36);
-    // 随机字符串
-    drag.dataset[this.randomFlag] = true;
-
+    drag.setAttribute('data-abc', '');
+    // 此次实例的随机ID
+    let randomID = Number(Math.random().toString().substr(3, 7) + Date.now()).toString(36);
+    if (randomID.indexOf('.') >= 0) {
+      randomID = randomID.match(/\.(.*)\(/)[1];
+    }
+    console.log(randomID);
+    this.randomID = randomID;
+    // 为容器元素添加自定义data属性
+    try {
+      drag.dataset[this.randomID] = '';
+    } catch (e) {
+      console.log(`data-${this.randomID}`);
+      drag.setAttribute(`data-${this.randomID}`, true);
+    }
+    // console.log('set: ', drag.dataset);
+    // if (drag.dataset) {
+      
+    // } else {
+      
+    // }
     let dragItems = drag.children;
 
     if (!drag.children.length) {
+      console.warn('未发现子元素！');
       return;
     }
+
     if (!data) {
       console.warn('未传入data，将不会修改任何数据！');
     } else {
       this.data = data;
     }
 
-    this.callBack = callBack;
-    // 是否开启移动动画效果
-    this.animation = animation;
-    // 容器相关
+    // 容器
     this.drag = drag;
+    // 子元素
     this.dragItems = Array.from(dragItems);
     // 上次被撞元素正在移动中，transitionend事件结束后置为false代表碰撞有效
     this.isMovein = false;
@@ -32,13 +53,19 @@ class Drag {
     // 当前正在拖拽的元素
     this.dragItem = null;
 
-    // 开启动画效果后计算距离
-    this.itemWidth = null;
-    this.itemHeight = null;
-    this.positionList = [];
-
+    // 回调方法
+    this.callBack = callBack;
+    // 是否开启移动动画效果
+    this.animation = animation;
+    
     if (animation) {
+       // 开启动画效果后计算距离
+      this.itemWidth = null;
+      this.itemHeight = null;
+      this.positionList = [];
+
       // 计算每一项的宽高
+      // 临时方案：计算宽高只取第一个chileren计算，这么做的话必须所有children宽高一样，否则会出问题!
       let itemInfo = dragItems[0].getBoundingClientRect();
       this.itemWidth = itemInfo.width;
       this.itemHeight = itemInfo.height;
@@ -55,10 +82,12 @@ class Drag {
       this.positionList = positionList;
 
       // 保存容器的宽高，用来拖拽时使宽高不为0
-      let containerInfo = drag.getBoundingClientRect();
-      let styleTag = document.createElement('style');
+      const containerInfo = drag.getBoundingClientRect();
+
+      const styleTag = document.createElement('style');
+
       styleTag.innerHTML = `
-        .child-drag-in[data-${this.randomFlag}] {
+        .child-drag-in[data-${this.randomID}] {
           position: relative;
           width: ${containerInfo.width}px;
           height: ${containerInfo.height}px;
@@ -66,7 +95,6 @@ class Drag {
       `;
       document.getElementsByTagName('head')[0].appendChild(styleTag);
       this.styleTag = styleTag;
-
     }
 
     document.addEventListener('mouseup', this.recoveryDrag);
