@@ -4,9 +4,10 @@ class Drag {
       new Throw('未传入参数：drag');
       return;
     }
+    console.log(drag);
     this.randomFlag = Number(Math.random().toString().substr(3, 7) + Date.now()).toString(36);
     // 随机字符串
-    drag.dataset[this.randomFlag] = '';
+    drag.dataset[this.randomFlag] = true;
 
     let dragItems = drag.children;
 
@@ -107,9 +108,9 @@ class Drag {
     target.classList.add('dragin')
     this.dragItem = target;
     // 兼容firefox
-    ev.dataTransfer.setData('text', this.innerHTML);
+    ev.dataTransfer.setData('text', this.dragItem.innerHTML);
     if (this.animation) {
-      // this.drag.style.position = 'relative';
+      this.drag.style.position = 'relative';
       for (let i = 0; i < this.dragItems.length; i++) {
         let item = this.dragItems[i];
         item.style.transition = '.2s';
