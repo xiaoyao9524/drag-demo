@@ -104,30 +104,36 @@ class Drag {
       item.setAttribute('draggable', true);
       item.setAttribute('drag-index', i);
       item.classList.add('drag-item');
-      // 当按下子元素时禁用拖拽
-      Array.from(item.querySelectorAll('*')).forEach(function (item) {
-        item.addEventListener('mousedown', that.disableDrag);
-      })
-
+      
+      item.addEventListener('mousedown', this.disableDrag);
+      item.addEventListener('mouseup', this.enableDrag);
       item.addEventListener('dragstart', this.handlerDragStart);
       item.addEventListener('dragover', this.handlerDragOver);
       item.addEventListener('dragend', this.handlerDragEnd);
     }
   }
 
-  // 当按下子元素时禁用拖拽
-  disableDrag = () => {
-    for (let item of this.dragItems) {
-      item.setAttribute('draggable', false);
+  // 当按下子元素时判断是否为子元素或有无规定的class(allow-drag)来决定是否禁用拖拽
+  disableDrag = ev => {
+    const {target} = ev;
+    // 是否为直接子元素
+    const isChildren = this.dragItems.indexOf(target) >= 0;
+    // 是否存在特殊的class
+    const isEnable = Array.from(target.classList).indexOf('allow-drag') >= 0;
+
+    if (!isChildren || !isEnable) {
+      for (let item of this.dragItems) {
+        item.setAttribute('draggable', false);
+      }
     }
   }
 
   // 当鼠标抬起时恢复拖拽
-  recoveryDrag = () => {
+  enableDrag = () => {
     for (let item of this.dragItems) {
       item.setAttribute('draggable', true);
     }
-  }
+  };
 
   // 开始拖动
   handlerDragStart = ev => {
@@ -149,7 +155,7 @@ class Drag {
       }
     }
     target.style.zIndex = '101';
-  }
+  };
 
   handlerDragEnd = ev => {
     // 结束拖动
@@ -169,7 +175,7 @@ class Drag {
         item.style.top = '';
       }
     }
-  }
+  };
 
   // 在被碰撞元素中移动
   handlerDragOver = ev => {

@@ -64,7 +64,11 @@ let list2 = document.querySelector('.list2');
 let data2 = ['item1', 'item2', 'item3', 'item4', 'item5'];
 let html2 = '';
 for (let item of data2) {
-  html2 += `<li class="item">${item} <button style="float: right;margin: 16px 5px 0 0;">删除</button></li>`;
+  html2 += `
+    <li class="item">
+      ${item}
+      <button class="allow-drag" style="float: right;margin: 16px 5px 0 0;">删除</button>
+    </li>`;
 }
 list2.innerHTML = html2;
 
