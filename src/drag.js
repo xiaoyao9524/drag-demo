@@ -3,33 +3,26 @@
 
 
 */
+import { randomString, addClass, removeClass } from './util';
 
 class Drag {
   constructor(drag, data, callBack, animation = false) {
     if (!drag) {
       return new Throw('未传入参数：drag');
     }
-    drag.setAttribute('data-abc', '');
+
     // 此次实例的随机ID
-    let randomID = Number(Math.random().toString().substr(3, 7) + Date.now()).toString(36);
-    if (randomID.indexOf('.') >= 0) {
-      randomID = randomID.match(/\.(.*)\(/)[1];
-    }
-    console.log(randomID);
+    let randomID = randomString();
+    // console.log('本次创建实例的id为：', randomID);
     this.randomID = randomID;
+
     // 为容器元素添加自定义data属性
     try {
       drag.dataset[this.randomID] = '';
     } catch (e) {
-      console.log(`data-${this.randomID}`);
       drag.setAttribute(`data-${this.randomID}`, true);
     }
-    // console.log('set: ', drag.dataset);
-    // if (drag.dataset) {
-      
-    // } else {
-      
-    // }
+    
     let dragItems = drag.children;
 
     if (!drag.children.length) {
@@ -104,6 +97,7 @@ class Drag {
       item.setAttribute('draggable', true);
       item.setAttribute('drag-index', i);
       item.classList.add('drag-item');
+      // addClass(item, 'drag-item');
       
       item.addEventListener('mousedown', this.disableDrag);
       item.addEventListener('mouseup', this.enableDrag);
@@ -116,12 +110,14 @@ class Drag {
   // 当按下子元素时判断是否为子元素或有无规定的class(allow-drag)来决定是否禁用拖拽
   disableDrag = ev => {
     const {target} = ev;
+    // console.log('按下：', target.className);
     // 是否为直接子元素
     const isChildren = this.dragItems.indexOf(target) >= 0;
     // 是否存在特殊的class
-    const isEnable = Array.from(target.classList).indexOf('allow-drag') >= 0;
-
-    if (!isChildren || !isEnable) {
+    const isEnable = target.className.indexOf('allow-drag') >= 0;
+    // console.log('是否为直接子元素：', isChildren);
+    // console.log('是否存在特殊的class: ', isEnable);
+    if (!isChildren && !isEnable) {
       for (let item of this.dragItems) {
         item.setAttribute('draggable', false);
       }
@@ -139,7 +135,9 @@ class Drag {
   handlerDragStart = ev => {
     const target = ev.target;
     this.drag.classList.add('child-drag-in');
+    // addClass(this.drag, 'child-drag-in');
     target.classList.add('dragin')
+    // addClass(target, 'dragin');
     this.dragItem = target;
     // 兼容firefox
     ev.dataTransfer.setData('text', this.dragItem.innerHTML);
@@ -161,7 +159,9 @@ class Drag {
     // 结束拖动
     const target = ev.target;
     this.drag.classList.remove('child-drag-in');
+    // removeClass(this.drag, 'child-drag-in')
     target.classList.remove('dragin');
+    // removeClass(target, 'dragin');
     this.dragItem = null;
     this.isMovein = false;
     if (this.animation) {
@@ -253,10 +253,14 @@ class Drag {
   }
 
   clear() {
+    document.getElementsByTagName('head')[0].removeChild(this.styleTag);
+
+
+
     for (let item of this.dragItems) {
-      document.getElementsByTagName('head')[0].removeChild(this.styleTag);
       item.removeAttribute('draggable');
       item.removeAttribute('drag-index');
+      // removeClass(item, 'drag-item');
       item.classList.remove('drag-item');
 
       item.removeEventListener('dragstart', this.handlerDragStart);

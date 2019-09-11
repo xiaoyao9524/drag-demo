@@ -36,6 +36,13 @@ module.exports = {
       filename: "dragRemove.html",
       template: "./src/dragRemove.html",
       chunks: ['dragRemove', 'common']
+    },
+    {
+      entryName: "test",
+      entryPath: "./src/test.main.js",
+      filename: "test.html",
+      template: "./src/test.html",
+      chunks: ['test', 'common']
     }
   ],
   proxy: {

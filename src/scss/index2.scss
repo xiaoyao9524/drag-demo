@@ -16,6 +16,8 @@ body {
     text-align: center;
     color: #fff;
     font-family: Helvetica,sans-serif;
+    user-select: none;
+    cursor: move;
   }
 }
 
@@ -35,5 +37,11 @@ body {
     color: #fff;
     user-select: none;
     background: #006688;
+    button {
+      float: right;
+      height: 24px;
+      line-height: 24px;
+      margin: 16px 5px 0 0;
+    }
   }
 }

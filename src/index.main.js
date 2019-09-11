@@ -6,7 +6,8 @@ FastClick.attach(document.body);
 
 import Drag from './Drag'
 
-let data = [{
+let data = [
+  {
     title: 'Aquamarine',
     bg: 'aquamarine'
   },
@@ -50,15 +51,16 @@ let html = '';
 
 for (let i = 0; i < data.length; i++) {
   let item = data[i];
-  html += `<li class="item" style="background-color: ${item.bg}">${i} ${item.title}</li>`;
+  html += `<li class="item allow-drag" style="background-color: ${item.bg}">${i} ${item.title}</li>`;
 }
 
 list.innerHTML = html;
 function cb1 (data, items) {
   // console.log('cb1: ', data, items);
 }
-new Drag(list, data, cb1, true);
+const drag1 = new Drag(list, data, cb1, true);
 
+console.log(drag1);
 
 let list2 = document.querySelector('.list2');
 let data2 = ['item1', 'item2', 'item3', 'item4', 'item5'];
@@ -67,7 +69,7 @@ for (let item of data2) {
   html2 += `
     <li class="item">
       ${item}
-      <button class="allow-drag" style="float: right;margin: 16px 5px 0 0;">删除</button>
+      <button class="">删除</button>
     </li>`;
 }
 list2.innerHTML = html2;

@@ -2,8 +2,8 @@ import "./scss/reset.scss";
 import "./scss/index.scss";
 // import $ from 'jquery';
 
-import FastClick from 'fastclick';
-FastClick.attach(document.body);
+// import FastClick from 'fastclick';
+// FastClick.attach(document.body);
 
 let tip = document.querySelector('.tip');
 
@@ -14,6 +14,7 @@ let dragEle = null;
 
 items.forEach((item) => {
   item.addEventListener('dragstart', function (ev) {
+    console.log('开始拖拽');
     ev.dataTransfer.setData('text', ev.target.innerHTML);
     // ev.dataTransfer.setDragImage(ev.target, 0, 0);
     dragEle = ev.target;
