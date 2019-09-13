@@ -60,7 +60,8 @@ function cb1 (data, items) {
 }
 const drag1 = new Drag(list, data, cb1, true);
 
-console.log(drag1);
+const closeList1DragBtn = document.querySelector('.close-list1-drag');
+closeList1DragBtn.addEventListener('click', drag1.destroy);
 
 let list2 = document.querySelector('.list2');
 let data2 = ['item1', 'item2', 'item3', 'item4', 'item5'];

@@ -6,38 +6,50 @@
 import { randomString, addClass, removeClass } from './util';
 
 class Drag {
-  constructor(drag, data, callBack, animation = false) {
-    if (!drag) {
-      return new Throw('未传入参数：drag');
-    }
-
-    // 此次实例的随机ID
-    let randomID = randomString();
-    // console.log('本次创建实例的id为：', randomID);
-    this.randomID = randomID;
-
-    // 为容器元素添加自定义data属性
-    try {
-      drag.dataset[this.randomID] = '';
-    } catch (e) {
-      drag.setAttribute(`data-${this.randomID}`, true);
-    }
-    
-    let dragItems = drag.children;
-
-    if (!drag.children.length) {
-      console.warn('未发现子元素！');
-      return;
-    }
-
+  constructor (drag, data, callBack, animation = false) {
+    this.drag = drag;
     if (!data) {
       console.warn('未传入data，将不会修改任何数据！');
     } else {
       this.data = data;
     }
+    this.callBack = callBack;
+    this.animation = animation;
+    this.install();
+  }
+
+
+
+  install () {
+    if (!this.drag) {
+      return new Throw('未传入参数：drag');
+    }
+
+    // 此次实例的随机ID
+    let randomID = randomString(8);
+    // console.log(randomID);
+    // console.log('本次创建实例的id为：', randomID);
+    this.randomID = randomID;
+    console.log('本次创建实例的id为：', this.randomID);
+    // drag.dataset[this.randomID] = true;
+    // 为容器元素添加自定义data属性
+    this.drag.setAttribute(`data-${this.randomID}`, true);
+    
+    let dragItems = this.drag.children;
+
+    if (!dragItems.length) {
+      console.warn('未发现子元素！');
+      return;
+    }
+
+    // if (!data) {
+    //   console.warn('未传入data，将不会修改任何数据！');
+    // } else {
+    //   this.data = data;
+    // }
 
     // 容器
-    this.drag = drag;
+    // this.drag = drag;
     // 子元素
     this.dragItems = Array.from(dragItems);
     // 上次被撞元素正在移动中，transitionend事件结束后置为false代表碰撞有效
@@ -47,11 +59,11 @@ class Drag {
     this.dragItem = null;
 
     // 回调方法
-    this.callBack = callBack;
+    // this.callBack = callBack;
     // 是否开启移动动画效果
-    this.animation = animation;
+    // this.animation = animation;
     
-    if (animation) {
+    if (this.animation) {
        // 开启动画效果后计算距离
       this.itemWidth = null;
       this.itemHeight = null;
@@ -75,7 +87,7 @@ class Drag {
       this.positionList = positionList;
 
       // 保存容器的宽高，用来拖拽时使宽高不为0
-      const containerInfo = drag.getBoundingClientRect();
+      const containerInfo = this.drag.getBoundingClientRect();
 
       const styleTag = document.createElement('style');
 
@@ -91,7 +103,7 @@ class Drag {
     }
 
     document.addEventListener('mouseup', this.recoveryDrag);
-    let that = this;
+    
     for (let i = 0; i < dragItems.length; i++) {
       const item = dragItems[i];
       item.setAttribute('draggable', true);
@@ -159,6 +171,9 @@ class Drag {
     // 结束拖动
     const target = ev.target;
     this.drag.classList.remove('child-drag-in');
+    if (this.animation) {
+      this.drag.style.position = null;
+    }
     // removeClass(this.drag, 'child-drag-in')
     target.classList.remove('dragin');
     // removeClass(target, 'dragin');
@@ -252,10 +267,16 @@ class Drag {
     }
   }
 
-  clear() {
+  destroy = () => {
+    // 删除创建的style标签
+    console.log(this.styleTag);
     document.getElementsByTagName('head')[0].removeChild(this.styleTag);
-
-
+    // 删除容器的自定义属性
+    this.drag.removeAttribute(`data-${this.randomID}`);
+    
+    
+    // 删除全局事件
+    document.removeEventListener('mouseup', this.recoveryDrag);
 
     for (let item of this.dragItems) {
       item.removeAttribute('draggable');
@@ -263,14 +284,12 @@ class Drag {
       // removeClass(item, 'drag-item');
       item.classList.remove('drag-item');
 
+      item.removeEventListener('mousedown', this.disableDrag);
+      item.removeEventListener('mouseup', this.enableDrag);
       item.removeEventListener('dragstart', this.handlerDragStart);
       item.removeEventListener('dragover', this.handlerDragOver);
       item.removeEventListener('dragend', this.handlerDragEnd);
     }
-  }
-
-  reload() {
-
   }
 }
 
