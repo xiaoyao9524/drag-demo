@@ -1,37 +1,35 @@
 /*
-  1、默认只在子元素可拖拽，孙元素默认无法拖拽，可通过添加class方式规定可拖拽元素,未来添加限制子元素拖拽功能。
+  1、默认只在子元素可拖拽，孙元素默认无法拖拽，可通过添加class方式规定可拖拽元素。
 
 
 */
-import { randomString, addClass, removeClass } from './util';
+import { randomString } from './util';
 
 class Drag {
   constructor (drag, data, callBack, animation = false) {
+    // 容器
     this.drag = drag;
+    // 检测数据
     if (!data) {
       console.warn('未传入data，将不会修改任何数据！');
     } else {
       this.data = data;
     }
+     // 回调方法
     this.callBack = callBack;
+    // 是否开启移动动画效果
     this.animation = animation;
     this.install();
   }
 
-
-
-  install () {
+  install = () => {
     if (!this.drag) {
       return new Throw('未传入参数：drag');
     }
 
     // 此次实例的随机ID
     let randomID = randomString(8);
-    // console.log(randomID);
-    // console.log('本次创建实例的id为：', randomID);
     this.randomID = randomID;
-    console.log('本次创建实例的id为：', this.randomID);
-    // drag.dataset[this.randomID] = true;
     // 为容器元素添加自定义data属性
     this.drag.setAttribute(`data-${this.randomID}`, true);
     
@@ -42,14 +40,6 @@ class Drag {
       return;
     }
 
-    // if (!data) {
-    //   console.warn('未传入data，将不会修改任何数据！');
-    // } else {
-    //   this.data = data;
-    // }
-
-    // 容器
-    // this.drag = drag;
     // 子元素
     this.dragItems = Array.from(dragItems);
     // 上次被撞元素正在移动中，transitionend事件结束后置为false代表碰撞有效
@@ -57,11 +47,6 @@ class Drag {
 
     // 当前正在拖拽的元素
     this.dragItem = null;
-
-    // 回调方法
-    // this.callBack = callBack;
-    // 是否开启移动动画效果
-    // this.animation = animation;
     
     if (this.animation) {
        // 开启动画效果后计算距离
@@ -109,7 +94,6 @@ class Drag {
       item.setAttribute('draggable', true);
       item.setAttribute('drag-index', i);
       item.classList.add('drag-item');
-      // addClass(item, 'drag-item');
       
       item.addEventListener('mousedown', this.disableDrag);
       item.addEventListener('mouseup', this.enableDrag);
@@ -122,7 +106,6 @@ class Drag {
   // 当按下子元素时判断是否为子元素或有无规定的class(allow-drag)来决定是否禁用拖拽
   disableDrag = ev => {
     const {target} = ev;
-    // console.log('按下：', target.className);
     // 是否为直接子元素
     const isChildren = this.dragItems.indexOf(target) >= 0;
     // 是否存在特殊的class
@@ -147,12 +130,12 @@ class Drag {
   handlerDragStart = ev => {
     const target = ev.target;
     this.drag.classList.add('child-drag-in');
-    // addClass(this.drag, 'child-drag-in');
     target.classList.add('dragin')
-    // addClass(target, 'dragin');
     this.dragItem = target;
+
     // 兼容firefox
     ev.dataTransfer.setData('text', this.dragItem.innerHTML);
+
     if (this.animation) {
       this.drag.style.position = 'relative';
       for (let i = 0; i < this.dragItems.length; i++) {
@@ -174,13 +157,10 @@ class Drag {
     if (this.animation) {
       this.drag.style.position = null;
     }
-    // removeClass(this.drag, 'child-drag-in')
     target.classList.remove('dragin');
-    // removeClass(target, 'dragin');
     this.dragItem = null;
     this.isMovein = false;
     if (this.animation) {
-      // this.drag.style.position = '';
       for (let i = 0; i < this.dragItems.length; i++) {
         let item = this.dragItems[i];
         item.style.transition = '';
@@ -269,19 +249,15 @@ class Drag {
 
   destroy = () => {
     // 删除创建的style标签
-    console.log(this.styleTag);
     document.getElementsByTagName('head')[0].removeChild(this.styleTag);
     // 删除容器的自定义属性
     this.drag.removeAttribute(`data-${this.randomID}`);
-    
-    
     // 删除全局事件
     document.removeEventListener('mouseup', this.recoveryDrag);
 
     for (let item of this.dragItems) {
       item.removeAttribute('draggable');
       item.removeAttribute('drag-index');
-      // removeClass(item, 'drag-item');
       item.classList.remove('drag-item');
 
       item.removeEventListener('mousedown', this.disableDrag);
@@ -290,6 +266,11 @@ class Drag {
       item.removeEventListener('dragover', this.handlerDragOver);
       item.removeEventListener('dragend', this.handlerDragEnd);
     }
+  }
+
+  reLoad = () => {
+    this.destroy();
+    this.install();
   }
 }
 
