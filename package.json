@@ -30,7 +30,7 @@
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-webpack-plugin": "^3.2.0",
     "html-withimg-loader": "^0.1.16",
-    "node-sass": "^4.8.3",
+    "node-sass": "^4.13.1",
     "portscanner": "^2.2.0",
     "postcss-loader": "^2.1.6",
     "precss": "^3.1.2",
